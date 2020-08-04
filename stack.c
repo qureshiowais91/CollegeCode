@@ -6,7 +6,6 @@
 #define empty -1
 #define size 10
 
-
 int pop(char stack[], int *top)
 {
     char operator;
