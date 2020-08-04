@@ -9,7 +9,7 @@
 int pop(char stack[], int *top)
 {
     char operator;
-    if (*top != empty)
+    if ((*top) != empty)
     {
         operator= stack[(*top)];
         stack[(*top)] = '\0'; /*segment fault here on secound loop*/
