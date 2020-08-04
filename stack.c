@@ -5,7 +5,8 @@
 #define max 9
 #define empty -1
 #define size 10
-#define test 10
+
+
 int pop(char stack[], int *top)
 {
     char operator;
