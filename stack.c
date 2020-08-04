@@ -24,12 +24,13 @@ int pop(char stack[], int *top)
 
 int priority(char operator)
 {
-    if(operator== '^' || operator == '$'){
+    if (operator== '^' || operator== '$')
+    {
         return 5;
     }
-    else if(operator == '*' || operator == '/'){
+    else if (operator== '*' || operator== '/')
+    {
         return 3;
-        
     }
     else
     {
@@ -43,11 +44,21 @@ int push(char *stack, int *top, char arg)
 {
     if (*top != max)
     {
-        *top++;
+        (*top)++;
         stack[*top] = arg;
         return 1;
     }
     printf("given array is full! can't push more data");
+    return 0;
+}
+
+int display(char *output, int top)
+{
+    int index = 0;
+    for (index = 0; index != top + 2; index++)
+    {
+        printf("%c", *(output + index));
+    }
     return 0;
 }
 
@@ -68,8 +79,7 @@ int main()
 
     printf("Enter Expression : ");
     fflush(stdin);
-    scanf("%s",expression);
-
+    scanf("%s", expression);
 
     /*1. Scan the infix expression from left to right.*/
     for (loop = 0; expression[loop] != '\0'; loop++)
@@ -79,27 +89,23 @@ int main()
         {
             output[index] = expression[loop];
             index++;
+            continue;
         }
-        else
+
+        /*Get priority of Operator*/
+        stack_priority_value = priority(stack[top]);
+        expression_priority_value = priority(expression[loop]);
+
+        if (top == empty || stack_priority_value <= expression_priority_value || expression[loop] == '(')
         {
-            /*Get priority of Operator*/
-            stack_priority_value = priority(stack[top]);
-            expression_priority_value = priority(expression[loop]);
-
-            if (top == empty || stack_priority_value < expression_priority_value || expression[loop] == '(')
-            {
-                push(stack, &top, expression[loop]);
-            }
-            else if (stack_priority_value >= expression_priority_value)
-            {
-                push(output, &index, pop(stack, &top));
-                push(stack, &top, expression[loop]);
-            }
+            push(stack, &top, expression[loop]);
         }
-
+        else if (stack_priority_value >= expression_priority_value)
+        {
+            push(output, &index, pop(stack, &top));
+            push(stack, &top, expression[loop]);
+        }
     }
-     
-      printf("%s",output);
-
+    display(output,top);
     return 0;
 }
