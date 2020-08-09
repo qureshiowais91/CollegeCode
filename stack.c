@@ -13,11 +13,12 @@ int pop(char stack[], int *top)
     {
         operator= stack[(*top)];
         stack[(*top)] = '\0'; /*segment fault here on secound loop*/
-        top--;
+        (*top)--;
     }
     else
     {
         printf("top is empty %d", *top);
+        return 0;
     }
     return operator;
 }
@@ -59,7 +60,7 @@ int push(char *stack, int *top, char arg)
 int display(char output[], int index)
 {
     int i;
-    for (i=0;index!=i;i++) {
+    for (i=0;index>i;i++) {
         printf("%c", output[i]);
     }
     return 0;
@@ -109,16 +110,24 @@ int main()
                 output[index] = pop(stack, &top);
                 index++;
             }
+            pop(stack,&top);
         }
         else if (stack_priority_value >= expression_priority_value)
         {
-            while (priority(stack[top]) >= expression_priority_value)
-            {
-                output[index]=pop(stack, &top);
-                index++;
+            while (priority(stack[top]) >= expression_priority_value && top != empty)
+            {   /*if top == -1 pop return 0 !*/
+                output[index++]=pop(stack, &top);
             }
+            push(stack, &top, expression[loop]);
         }
     }
+
+    while (top!=empty)
+    {
+        output[index] = pop(stack,&top);
+        index++;
+    }
+
     display(output, index);
     return 0;
 }
