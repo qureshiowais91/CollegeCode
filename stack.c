@@ -24,17 +24,21 @@ int pop(char stack[], int *top)
 
 int priority(char operator)
 {
-    if (operator== '^' || operator== '$')
+    if (operator == '(')
+    {
+        return 6;
+    }
+    else if (operator == '^' || operator =='$')
     {
         return 5;
     }
-    else if (operator== '*' || operator== '/')
+    else if (operator=='/' || operator == '*')
+    {
+        return 4;
+    }
+    else if (operator=='+' || operator == '-')
     {
         return 3;
-    }
-    else
-    {
-        return 1;
     }
     return 0;
 }
@@ -52,12 +56,11 @@ int push(char *stack, int *top, char arg)
     return 0;
 }
 
-int display(char *output, int top)
+int display(char output[], int index)
 {
-    int index = 0;
-    for (index = 0; index != top + 2; index++)
-    {
-        printf("%c", *(output + index));
+    int i;
+    for (i=0;index!=i;i++) {
+        printf("%c", output[i]);
     }
     return 0;
 }
@@ -84,28 +87,38 @@ int main()
     /*1. Scan the infix expression from left to right.*/
     for (loop = 0; expression[loop] != '\0'; loop++)
     {
-        /*If the scanned character is an operand, save it to output var.*/
+        /*scanned character is an operand*/
         if (isalnum(expression[loop]))
         {
-            output[index] = expression[loop];
+            output[index]=expression[loop];
             index++;
             continue;
         }
-
-        /*Get priority of Operator*/
         stack_priority_value = priority(stack[top]);
-        expression_priority_value = priority(expression[loop]);
+        expression_priority_value= priority(expression[loop]);
 
-        if (top == empty || stack_priority_value <= expression_priority_value || expression[loop] == '(')
+        if (top == empty  || stack_priority_value < expression_priority_value || stack[top] == '(')
         {
             push(stack, &top, expression[loop]);
+        }
+        /*pop all the operators from the stack which are greater than or equal priority*/
+        else if (expression[loop] == ')')
+        {
+            while (stack[top]!='(')
+            {
+                output[index] = pop(stack, &top);
+                index++;
+            }
         }
         else if (stack_priority_value >= expression_priority_value)
         {
-            push(output, &index, pop(stack, &top));
-            push(stack, &top, expression[loop]);
+            while (priority(stack[top]) >= expression_priority_value)
+            {
+                output[index]=pop(stack, &top);
+                index++;
+            }
         }
     }
-    display(output,top);
+    display(output, index);
     return 0;
 }
