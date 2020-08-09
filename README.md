@@ -1,2 +1,2 @@
 # InfixTOConvert
-## useing stack infix to postfix,prefix and vise versa converter
+## using stack infix to postfix,prefix and vise versa converter
