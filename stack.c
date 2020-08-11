@@ -95,6 +95,7 @@ int main()
             index++;
             continue;
         }
+        
         stack_priority_value = priority(stack[top]);
         expression_priority_value= priority(expression[loop]);
 
@@ -107,10 +108,10 @@ int main()
         {
             while (stack[top]!='(')
             {
-                output[index] = pop(stack, &top);
-                index++;
+                output[index++] = pop(stack, &top);
+
             }
-            pop(stack,&top);
+            pop(stack, &top);
         }
         else if (stack_priority_value >= expression_priority_value)
         {
@@ -124,7 +125,7 @@ int main()
 
     while (top!=empty)
     {
-        output[index] = pop(stack,&top);
+        output[index] = pop(stack, &top);
         index++;
     }
 
