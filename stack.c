@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
 #define max 9
 #define empty -1
@@ -66,10 +67,23 @@ int display(char output[], int index)
     return 0;
 }
 
-int main()
+
+int string_reverse(char *str)
+{
+    int i;
+    int j=strlen(str)-1;
+    for(i=0;i!=j/2;i++)
+    {     
+       str[i]= str[i]+str[j-i];
+       str[i-j]=str[i]-str[j-i];
+       str[i]= str[i]-str[i-j];      
+    }
+   return 0;
+}
+
+int infixtoPostfix(char expression[])
 {
 
-    char expression[size];
     char output[size];
     char stack[size];
 
@@ -81,10 +95,6 @@ int main()
     int loop = 0;
     int index = 0;
 
-    printf("Enter Expression : ");
-    fflush(stdin);
-    scanf("%s", expression);
-
     /*1. Scan the infix expression from left to right.*/
     for (loop = 0; expression[loop] != '\0'; loop++)
     {
@@ -95,7 +105,7 @@ int main()
             index++;
             continue;
         }
-        
+
         stack_priority_value = priority(stack[top]);
         expression_priority_value= priority(expression[loop]);
 
@@ -130,5 +140,82 @@ int main()
     }
 
     display(output, index);
+    return 0;
+}
+
+int infixtoprefix(char expression[])
+{
+
+    char output[size];
+    char stack[size];
+
+    unsigned short int stack_priority_value;
+    unsigned short int expression_priority_value;
+
+    int top = -1;
+
+    int loop = 0;
+    int index = 0;
+      
+
+    /*1. Scan the infix expression from left to right.*/
+    for (loop = 0; expression[loop] != '\0'; loop++)
+    {
+        /*scanned character is an operand*/
+        if (isalnum(expression[loop]))
+        {
+            output[index]=expression[loop];
+            index++;
+            continue;
+        }
+
+        stack_priority_value = priority(stack[top]);
+        expression_priority_value= priority(expression[loop]);
+
+        if (top == empty  || stack_priority_value < expression_priority_value || stack[top] == '(')
+        {
+            push(stack, &top, expression[loop]);
+        }
+        /*pop all the operators from the stack which are greater than or equal priority*/
+        else if (expression[loop] == ')')
+        {
+            while (stack[top]!='(')
+            {
+                output[index++] = pop(stack, &top);
+
+            }
+            pop(stack, &top);
+        }
+        else if (stack_priority_value >= expression_priority_value)
+        {
+            while (priority(stack[top]) >= expression_priority_value && top != empty)
+            {   /*if top == -1 pop return 0 !*/
+                output[index++]=pop(stack, &top);
+            }
+            push(stack, &top, expression[loop]);
+        }
+    }
+
+    while (top!=empty)
+    {
+        output[index] = pop(stack, &top);
+        index++;
+    }
+
+    display(output, index);
+    return 0;
+}
+
+int main()
+{
+    char expression[size];
+    unsigned int choice;
+
+    printf("Enter Expression :");
+    scanf("%s", expression);
+    
+    string_reverse(expression); 
+    infixtoprefix(expression);
+
     return 0;
 }
