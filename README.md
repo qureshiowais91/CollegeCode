@@ -1,2 +1,2 @@
-# indixToConverter
-convert infix to other fixs, written in c language. using stack algorithm.
+# InfixTOConvert
+## using stack infix to postfix,prefix and vise versa converter
