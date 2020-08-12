@@ -26,19 +26,19 @@ int pop(char stack[], int *top)
 
 int priority(char operator)
 {
-    if (operator == '(')
+    if (operator== '(')
     {
         return 6;
     }
-    else if (operator == '^' || operator =='$')
+    else if (operator== '^' || operator== '$')
     {
         return 5;
     }
-    else if (operator=='/' || operator == '*')
+    else if (operator== '/' || operator== '*')
     {
         return 4;
     }
-    else if (operator=='+' || operator == '-')
+    else if (operator== '+' || operator== '-')
     {
         return 3;
     }
@@ -61,24 +61,50 @@ int push(char *stack, int *top, char arg)
 int display(char output[], int index)
 {
     int i;
-    for (i=0;index>i;i++) {
+    for (i = 0; index > i; i++)
+    {
         printf("%c", output[i]);
     }
     return 0;
 }
 
-
 int string_reverse(char *str)
 {
-    int i;
-    int j=strlen(str)-1;
-    for(i=0;i!=j/2;i++)
-    {     
-       str[i]= str[i]+str[j-i];
-       str[i-j]=str[i]-str[j-i];
-       str[i]= str[i]-str[i-j];      
+    int i=0;
+    int j = strlen(str);
+
+    for (i = 0; i != j / 2; i++)
+    {
+        if (str[j - i] == '(')
+        {
+            str[j - i] = ')';
+            continue;
+        }
+
+        else if (str[j - i] == ')')
+        {
+            str[j - i] = '(';
+            continue;
+        }
+
+        if (str[i] == '(')
+        {
+            str[i] = ')';
+            continue;
+        }
+
+        else if (str[i] == ')')
+        {
+            str[i] = '(';
+            continue;
+        }
+
+        str[i] = str[i] + str[j - i];
+        str[j - i] = str[i] - str[j - i];
+        str[i] = str[i] - str[j - i];
     }
-   return 0;
+
+    return 0;
 }
 
 int infixtoPostfix(char expression[])
@@ -101,39 +127,38 @@ int infixtoPostfix(char expression[])
         /*scanned character is an operand*/
         if (isalnum(expression[loop]))
         {
-            output[index]=expression[loop];
+            output[index] = expression[loop];
             index++;
             continue;
         }
 
         stack_priority_value = priority(stack[top]);
-        expression_priority_value= priority(expression[loop]);
+        expression_priority_value = priority(expression[loop]);
 
-        if (top == empty  || stack_priority_value < expression_priority_value || stack[top] == '(')
+        if (top == empty || stack_priority_value < expression_priority_value || stack[top] == '(')
         {
             push(stack, &top, expression[loop]);
         }
         /*pop all the operators from the stack which are greater than or equal priority*/
         else if (expression[loop] == ')')
         {
-            while (stack[top]!='(')
+            while (stack[top] != '(')
             {
                 output[index++] = pop(stack, &top);
-
             }
             pop(stack, &top);
         }
         else if (stack_priority_value >= expression_priority_value)
         {
             while (priority(stack[top]) >= expression_priority_value && top != empty)
-            {   /*if top == -1 pop return 0 !*/
-                output[index++]=pop(stack, &top);
+            { /*if top == -1 pop return 0 !*/
+                output[index++] = pop(stack, &top);
             }
             push(stack, &top, expression[loop]);
         }
     }
 
-    while (top!=empty)
+    while (top != empty)
     {
         output[index] = pop(stack, &top);
         index++;
@@ -156,7 +181,6 @@ int infixtoprefix(char expression[])
 
     int loop = 0;
     int index = 0;
-      
 
     /*1. Scan the infix expression from left to right.*/
     for (loop = 0; expression[loop] != '\0'; loop++)
@@ -164,45 +188,56 @@ int infixtoprefix(char expression[])
         /*scanned character is an operand*/
         if (isalnum(expression[loop]))
         {
-            output[index]=expression[loop];
+            output[index] = expression[loop];
             index++;
             continue;
         }
 
         stack_priority_value = priority(stack[top]);
-        expression_priority_value= priority(expression[loop]);
+        expression_priority_value = priority(expression[loop]);
 
-        if (top == empty  || stack_priority_value < expression_priority_value || stack[top] == '(')
+        if (top == empty || stack_priority_value < expression_priority_value || stack[top] == '(')
         {
             push(stack, &top, expression[loop]);
         }
         /*pop all the operators from the stack which are greater than or equal priority*/
         else if (expression[loop] == ')')
         {
-            while (stack[top]!='(')
+            while (stack[top] != '(')
             {
                 output[index++] = pop(stack, &top);
-
             }
             pop(stack, &top);
         }
         else if (stack_priority_value >= expression_priority_value)
         {
             while (priority(stack[top]) >= expression_priority_value && top != empty)
-            {   /*if top == -1 pop return 0 !*/
-                output[index++]=pop(stack, &top);
+            { /*if top == -1 pop return 0 !*/
+                output[index++] = pop(stack, &top);
             }
             push(stack, &top, expression[loop]);
         }
     }
 
-    while (top!=empty)
+    while (top != empty)
     {
         output[index] = pop(stack, &top);
         index++;
     }
 
-    display(output, index);
+    while ((index + 1))
+    {
+        /*
+        if(output[index]==')' || output[index]=='(')
+        {
+            index--;
+            continue;
+        }
+        */
+        printf("%c", output[index]);
+        index--;
+    }
+
     return 0;
 }
 
@@ -213,8 +248,8 @@ int main()
 
     printf("Enter Expression :");
     scanf("%s", expression);
-    
-    string_reverse(expression); 
+
+    string_reverse(expression);
     infixtoprefix(expression);
 
     return 0;
