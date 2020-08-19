@@ -5,7 +5,7 @@
 
 #define max 9
 #define empty -1
-#define size 10
+#define size 25
 
 int infixtoPostfix(char *expression);
 
@@ -60,15 +60,6 @@ int push(char *stack, int *top, char arg)
     return 0;
 }
 
-// int display(char output[], int index)
-// {
-//     int i;
-//     for (i = 0; index > i; i++)
-//     {
-//         printf("%c", output[i]);
-//     }
-//     return 0;
-// }
 
 int string_reverse(char *str)
 {
@@ -97,13 +88,13 @@ int string_reverse(char *str)
 }
 
 int infixtoprefix(char *expression)
-{ 
+{
     int index;
     string_reverse(expression);
     infixtoPostfix(expression);
     string_reverse(expression);
 
-    printf("%s",expression);
+    printf("%s\n", expression);
 
     return 0;
 }
@@ -153,7 +144,7 @@ int infixtoPostfix(char *expression)
         }
         else if (stack_priority_value >= expression_priority_value)
         {
-            while (priority(stack[top]) >= expression_priority_value && top != 0)
+            while (priority(stack[top]) >= expression_priority_value)
             { /*if top == -1 pop return 0 !*/
                 output[index++] = pop(stack, &top);
             }
@@ -172,20 +163,20 @@ int infixtoPostfix(char *expression)
         expression[counter] = output[counter];
     }
 
-    expression[counter]='\0'; 
-      
+    expression[counter] = '\0';
+
     return 0;
 }
 
 int main()
 {
     char expression[size];
-    unsigned int choice;
+    int choice;
 
-    printf("Enter Expression :");
+    printf("Enter expression : ");
     scanf("%s", expression);
 
-    infixtoprefix(expression); 
+    infixtoprefix(expression);
 
     return 0;
 }
