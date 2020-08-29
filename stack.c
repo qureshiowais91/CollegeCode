@@ -3,13 +3,13 @@
 #include <ctype.h>
 #include <string.h>
 
-#define max 9
+#define max size - 1
 #define empty -1
 #define size 25
 
 int infixtoPostfix(char *expression);
 
-int pop(char stack[], int *top)
+int pop(char *stack, int *top)
 {
     char operator;
     if ((*top) != empty)
@@ -59,7 +59,6 @@ int push(char *stack, int *top, char arg)
     printf("given array is full! can't push more data");
     return 0;
 }
-
 
 int string_reverse(char *str)
 {
@@ -168,6 +167,51 @@ int infixtoPostfix(char *expression)
     return 0;
 }
 
+int posttoInfix(char *expression)
+{
+    char stack[size];
+    char output[size];
+
+    unsigned int loo = 0;
+
+    char oprand1, oprand2;
+
+    int top = empty;
+    int index;
+    int counter = 0;
+
+    for (index = 0; expression[index] != '\0'; index++)
+    {
+        if (isalnum(expression[index]))
+        {
+            push(stack, &top, expression[index]);
+        }
+        else
+        {
+            if (top != empty)
+                oprand2 = pop(stack, &top);
+            if (top != empty)
+                oprand1 = pop(stack, &top);
+            else
+            {   output[loo++] = expression[index];
+               output[loo++]=oprand2; 
+            }
+            
+            output[loo++] = oprand1;
+            output[loo++] = expression[index];
+            output[loo++] = oprand2;
+
+        }
+    }
+
+    for (loo =0; loo < index;loo++)
+    {
+        printf("%c",output[loo]);
+    }
+
+    return 0;
+}
+
 int main()
 {
     char expression[size];
@@ -176,7 +220,8 @@ int main()
     printf("Enter expression : ");
     scanf("%s", expression);
 
-    infixtoprefix(expression);
+    posttoInfix(expression);
+    
 
     return 0;
 }
