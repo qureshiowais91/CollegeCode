@@ -1,3 +1,21 @@
+// 1. infix to postfix
+// 2. infix to prefix
+// 3. infix implementation
+// 4. postfix to infix
+// 5. postfix to prefix
+// 6. postfix impletation
+// 7. prefix to infix
+// 8. prefix to postfix
+// 9. prefix implementation
+// 10. simple que
+// 11. doulby que
+// 12. circular que
+// 13. Write Menu Driven Program to implement push (), pop (), Peep () , display ( ) and Change Operation.
+// 14. singly link list
+// 15. doulby link list
+// 16. circular singly
+// 17. circular doulby
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -85,19 +103,16 @@ int string_reverse(char *str)
 
     return 0;
 }
-
+// infix to prefix
 int infixtoprefix(char *expression)
 {
     int index;
     string_reverse(expression);
     infixtoPostfix(expression);
     string_reverse(expression);
-
-    printf("%s\n", expression);
-
     return 0;
 }
-
+// infix to POSTFIX
 int infixtoPostfix(char *expression)
 {
 
@@ -127,7 +142,6 @@ int infixtoPostfix(char *expression)
 
         stack_priority_value = priority(stack[top]);
         expression_priority_value = priority(expression[loop]);
-
         if (top == empty || stack_priority_value < expression_priority_value || stack[top] == '(')
         {
             push(stack, &top, expression[loop]);
@@ -166,48 +180,15 @@ int infixtoPostfix(char *expression)
 
     return 0;
 }
-
-int posttoInfix(char *expression)
+int stringHandler()
 {
-    char stack[size];
-    char output[size];
 
-    unsigned int loo = 0;
+    return 0;
+}
 
-    char oprand1, oprand2;
-
-    int top = empty;
-    int index;
-    int counter = 0;
-
-    for (index = 0; expression[index] != '\0'; index++)
-    {
-        if (isalnum(expression[index]))
-        {
-            push(stack, &top, expression[index]);
-        }
-        else
-        {
-            if (top != empty)
-                oprand2 = pop(stack, &top);
-            if (top != empty)
-                oprand1 = pop(stack, &top);
-            else
-            {   output[loo++] = expression[index];
-               output[loo++]=oprand2; 
-            }
-            
-            output[loo++] = oprand1;
-            output[loo++] = expression[index];
-            output[loo++] = oprand2;
-
-        }
-    }
-
-    for (loo =0; loo < index;loo++)
-    {
-        printf("%c",output[loo]);
-    }
+// postfix to infix
+int postInfix(char *expression)
+{
 
     return 0;
 }
@@ -217,11 +198,24 @@ int main()
     char expression[size];
     int choice;
 
-    printf("Enter expression : ");
+    printf("\n:1 Infix to PreFix.\n:2 Infix to PostFix \n:3 Postfix to infix(Not Working)\n");
+    scanf("%d", &choice);
     scanf("%s", expression);
-
-    posttoInfix(expression);
-    
+    switch (choice)
+    {
+    case 1:
+        fflush(stdin);
+        infixtoprefix(expression);
+        printf("%s\n", expression);
+        break;
+    case 2:
+        infixtoPostfix(expression);
+        printf("%s\n", expression);
+        break;
+    default:
+        printf("Really It's not an option!!");
+        break;
+    }
 
     return 0;
 }
